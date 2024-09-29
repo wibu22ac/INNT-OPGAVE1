@@ -1,10 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { getApps, initializeApp } from 'firebase/app';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import HomeScreen from './screens/HomeScreen';
 import SignUpComponent from './components/SignUpComponent';
 import LogInComponent from './components/LogInComponent';
@@ -28,32 +27,13 @@ if (!getApps().length) {
 const Stack = createStackNavigator();
 
 export default function App() {
-  const [user, setUser] = useState({ loggedIn: false });
-
-  const auth = getAuth();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser({ loggedIn: true, email: user.email });
-        console.log("You are logged in!");
-      } else {
-        setUser({ loggedIn: false });
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, [auth]);
-
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Main">
-        <Stack.Screen name="Main" component={MainScreen} />
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="SignUp" component={SignUpComponent} />
         <Stack.Screen name="LogIn" component={LogInComponent} />
+        <Stack.Screen name="Main" component={MainScreen} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
